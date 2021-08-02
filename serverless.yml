@@ -1,0 +1,26 @@
+service: helpwise-integration
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  region: ap-southeast-1
+
+functions:
+  helpWiseHandler:
+    handler: handler.helpWiseHandler
+    events:
+      - http:
+          path: /helpwise
+          method: POST
+          request:
+            parameters:
+              querystrings:
+                action: true
+
+
+
+plugins:
+  - serverless-offline
