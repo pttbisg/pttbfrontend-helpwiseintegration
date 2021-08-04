@@ -3,10 +3,14 @@ const HelpWise = require("./HelpWise");
 const {
     CONVERSATION_CREATED,
     CONVERSATION_ASSIGNED,
+    CONVERSATION_APPLIED_TAG,
+    AGENT_REPLIED,
+    CUSTOMER_REPLIED,
     WHATSAPP_INBOUND,
     WHATSAPP_OUTBOUND
 } = require("./constants");
 
+const Backendless = require('./Backendless');
 /*
 Whatsapp inbound response
 {
@@ -41,7 +45,7 @@ Conversation Created
     ticket_id: 13229748,
     emails: {
     '22235166': {
-        id: 22439542,
+            id: 22439542,
             thread_id: 13229748,
             cc: [],
             to: [Array],
@@ -85,6 +89,7 @@ Conversation Assigned
 }*/
 
 module.exports.helpWiseHandler = async (event) => {
+    const parsedBody = JSON.parse(event.body);
     console.log(event);
 
     const {action} = event.queryStringParameters;
@@ -92,26 +97,38 @@ module.exports.helpWiseHandler = async (event) => {
 
     if (secretKey !== process.env.HELPWISE_SECRET){
         console.log("Secret Key Mismatch", secretKey);
-        return { statusCode: 400, body: "secret key mismatch" };
+        return { statusCode: 400, body: "secret key mismatch"};
     }
     if (!action) return { statusCode: 400, body: "action parameter is required" };
 
     const helpWise = new HelpWise();
     switch (action) {
         case CONVERSATION_CREATED: {
-            await helpWise.onConversationCreated(event);
+            await helpWise.onConversationCreated(parsedBody);
             break;
         }
         case CONVERSATION_ASSIGNED: {
-            await helpWise.onConversationAssigned(event);
+            await helpWise.onConversationAssigned(parsedBody);
+            break;
+        }
+        case CONVERSATION_APPLIED_TAG: {
+            await helpWise.onConversationTagApplied(parsedBody);
+            break;
+        }
+        case AGENT_REPLIED: {
+            await helpWise.onReplyFromAgent(parsedBody);
+            break;
+        }
+        case CUSTOMER_REPLIED: {
+            await helpWise.onReplyFromCustomer(parsedBody)
             break;
         }
         case WHATSAPP_INBOUND: {
-            await helpWise.onWhatsAppInboundMessage(event);
+            await helpWise.onWhatsAppInboundMessage(parsedBody);
             break;
         }
         case WHATSAPP_OUTBOUND: {
-            await helpWise.onWhatsAppOutboundMessage(event);
+            await helpWise.onWhatsAppOutboundMessage(parsedBody);
             break;
         }
         default: {

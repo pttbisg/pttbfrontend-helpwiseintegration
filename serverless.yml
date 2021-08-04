@@ -19,8 +19,5 @@ functions:
             parameters:
               querystrings:
                 action: true
-
-
-
 plugins:
   - serverless-offline

@@ -1,3 +1,5 @@
+const Backendless = require('./Backendless');
+const backendless = new Backendless();
 /**
  * @typedef HelpWiseConversationObject
  * @property id
@@ -54,15 +56,15 @@ class HelpWise {
         //TODO
     }
 
-    async onConversationTagApplied() {
+    async onConversationTagApplied(conversationObject) {
+        console.log('Conversation Tag Applied', conversationObject);
+    }
+
+    async onReplyFromAgent(conversationObject) {
         //TODO
     }
 
-    async onReplyFromAgent() {
-        //TODO
-    }
-
-    async onReplyFromCustomer() {
+    async onReplyFromCustomer(conversationObject) {
         //TODO
     }
 
@@ -73,6 +75,7 @@ class HelpWise {
      */
     async onWhatsAppInboundMessage(whatsappConversationObject) {
         console.log('Whatsapp Inbound', whatsappConversationObject);
+        await backendless.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
     }
 
     /**
@@ -82,7 +85,9 @@ class HelpWise {
      */
     async onWhatsAppOutboundMessage(whatsappConversationObject) {
         console.log('Whatsapp Outbound', whatsappConversationObject);
+        await backendless.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
     }
+
 }
 
 module.exports = HelpWise;
