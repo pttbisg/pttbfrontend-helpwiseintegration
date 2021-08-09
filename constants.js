@@ -1,6 +1,6 @@
 module.exports.CONVERSATION_CREATED = "conversation_created";
 module.exports.CONVERSATION_ASSIGNED = "conversation_assigned";
-module.exports.CONVERSATION_APPLIED_TAG = "conversation_applied_tag";
+module.exports.CONVERSATION_APPLIED_TAG = "conversation_applied_tags";
 module.exports.AGENT_REPLIED = "agent_replied";
 module.exports.CUSTOMER_REPLIED = "customer_replied";
 module.exports.WHATSAPP_INBOUND = "whatsapp_inbound";

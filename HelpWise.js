@@ -1,5 +1,6 @@
 const Backendless = require('./Backendless');
 const backendless = new Backendless();
+
 /**
  * @typedef HelpWiseConversationObject
  * @property id
@@ -34,6 +35,7 @@ class HelpWise {
      */
     async onConversationCreated(conversationObject) {
         console.log('Conversation Created', conversationObject);
+        await backendless.insertEmailConversationIntoBE(conversationObject);
     }
 
     async onConversationAssigned(conversationObject) {
@@ -58,14 +60,20 @@ class HelpWise {
 
     async onConversationTagApplied(conversationObject) {
         console.log('Conversation Tag Applied', conversationObject);
+        const {tag, mailbox_id, thread_id, date} = conversationObject;
+        await backendless.updateConversationTag(thread_id, tag.name.toLowerCase(), {
+            updatedAt: date,
+            mailboxId: mailbox_id
+        });
     }
 
     async onReplyFromAgent(conversationObject) {
-        //TODO
+        console.log('Agent Replied', conversationObject);
     }
 
     async onReplyFromCustomer(conversationObject) {
-        //TODO
+        console.log('Customer Replied', conversationObject);
+        await backendless.insertEmailConversationIntoBE(conversationObject);
     }
 
     /**
