@@ -41,10 +41,14 @@ class Backendless {
      * @return {Promise<null|Array<object>>}
      * @private
      */
-    async _findObjectByProperty(property, value, operator) {
+    async _findObjectByProperty(property, value, operator, type = 'string') {
         try {
-            const whereClause = `${property} ${operator} ${value}`;
+            let whereClause = `${property} ${operator} ${value}`;
+            if (type === 'string') {
+                whereClause = `${property} ${operator} '${value}'`;
+            }
             const queryBuilder = backendless.DataQueryBuilder.create().setWhereClause(whereClause);
+            queryBuilder.setPageSize( 50 ).setOffset( 0 );
             return backendless.Data.of(process.env.HELPWISE_CONVERSATION_TABLE).find(queryBuilder);
         } catch (e) {
             console.log(e);
@@ -74,6 +78,24 @@ class Backendless {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    async findConversationByTag() {
+        const groupedByTag = {};
+        const conversations = await this._findObjectByProperty('tag', 'null', 'is not', 'int');
+        for (const message of conversations) {
+            const {tag, conversationId} = message
+            if (!groupedByTag.hasOwnProperty(tag)) {
+                groupedByTag[tag] = {};
+            }
+
+            if (!groupedByTag[tag].hasOwnProperty(conversationId)) {
+                groupedByTag[tag][conversationId] = [];
+            }
+
+            groupedByTag[tag][conversationId].push(message);
+        }
+        return groupedByTag;
     }
 
     /**

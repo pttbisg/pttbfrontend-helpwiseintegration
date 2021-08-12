@@ -9,6 +9,13 @@ provider:
   region: ap-southeast-1
 
 functions:
+  clientConversations:
+    handler: handler.clientConversations
+    events:
+      - http:
+          path: /conversations
+          method: POST
+          cors: true
   helpWiseHandler:
     handler: handler.helpWiseHandler
     events:
