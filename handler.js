@@ -12,28 +12,40 @@ const {
 
 const Backendless = require('./Backendless');
 
-/*
-Conversation Assigned
-{
-    thread_id: 13229748,
-    mailbox_id: 214012,
-    assigned_by: {
-    id: 214603,
-        first_name: 'Daniel',
-        last_name: 'Chua',
-        email: 'ask@interstellargoods.sg',
-        profile_pic: '',
-        is_admin: true
-},
-    assigned_to: {
-        id: 214603,
-            first_name: 'Daniel',
-            last_name: 'Chua',
-            email: 'ask@interstellargoods.sg',
-            profile_pic: '',
-            is_admin: true
+module.exports.sendMessageToClients = async (event) => {
+    const parsedBody = JSON.parse(event.body);
+    console.log("sendMessagePayload", parsedBody);
+
+    const {numbers, messageText, channel} = parsedBody;
+    const responseObject = {
+        statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+        },
+        body: ''
+    };
+
+    const helpWise = new HelpWise();
+    switch (channel.toString()) {
+        case 'whatsapp': {
+            const response = await helpWise.sendMessagesViaWhatsapp({
+                numbers: numbers,
+                messageText: messageText
+            });
+
+            responseObject.statusCode = 200;
+            responseObject.body = JSON.stringify(response);
+            break;
+        }
+        default: {
+            responseObject.statusCode = 501;
+            responseObject.body = 'Channel not implemented';
+            break;
+        }
     }
-}*/
+    return responseObject
+};
 
 module.exports.clientConversations = async (event) => {
     const backendless = new Backendless();

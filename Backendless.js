@@ -93,6 +93,14 @@ class Backendless {
                 groupedByTag[tag][conversationId] = [];
             }
 
+            if(message.messageType === 'EMAIL') {
+                if( message.receiver === process.env.HELPWISE_EMAIL_ACCOUNT) {
+                    message.messageDirection = 'Inbound'
+                }else {
+                    message.messageDirection = 'Outbound'
+                }
+
+            }
             groupedByTag[tag][conversationId].push(message);
         }
         return groupedByTag;

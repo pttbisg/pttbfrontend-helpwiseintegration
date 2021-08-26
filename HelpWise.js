@@ -1,5 +1,6 @@
 const Backendless = require('./Backendless');
 const backendless = new Backendless();
+const axios = require('axios');
 
 /**
  * @typedef HelpWiseConversationObject
@@ -96,6 +97,35 @@ class HelpWise {
         await backendless.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
     }
 
+    /**
+     *
+     * @param sendMessageObject
+     * @param {Array} sendMessageObject.numbers
+     * @param {String} sendMessageObject.messageText
+     * @returns {Promise<*[]>}
+     */
+    async sendMessagesViaWhatsapp(sendMessageObject) {
+        console.log("Sending messages via Whatsapp", sendMessageObject);
+        const results = [];
+        for (const number of sendMessageObject.numbers) {
+
+            const data = {
+                "mailbox_id": process.env.HELP_WHATSAPP_MAILBOX_ID,
+                "to": number.toString(),
+                "message": sendMessageObject.messageText
+            };
+
+            console.log("Sending message to", number.toString());
+            const response = await axios.post('https://app.helpwise.io/dev-apis/whatsapp/send', data, {
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": `${process.env.HELPWISE_KEY}:${process.env.HELPWISE_SECRET}`
+                }
+            });
+            results.push(response.data);
+        }
+        return results;
+    }
 }
 
 module.exports = HelpWise;

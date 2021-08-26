@@ -9,6 +9,13 @@ provider:
   region: ap-southeast-1
 
 functions:
+  sendMessageToClients:
+    handler: handler.sendMessageToClients
+    events:
+      - http:
+          path: /sendmessages
+          method: POST
+          cors: true
   clientConversations:
     handler: handler.clientConversations
     events:
