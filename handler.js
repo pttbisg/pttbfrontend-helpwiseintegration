@@ -11,6 +11,7 @@ const {
 } = require("./constants");
 
 const Backendless = require('./Backendless');
+const Supabase = require("./SupaBase");
 
 module.exports.sendMessageToClients = async (event) => {
     const parsedBody = JSON.parse(event.body);
@@ -48,8 +49,9 @@ module.exports.sendMessageToClients = async (event) => {
 };
 
 module.exports.clientConversations = async (event) => {
-    const backendless = new Backendless();
-    const conversations = await backendless.findConversationByTag()
+    const supabase = new Supabase();
+    const conversations = await supabase.findConversationByTag()
+
     return {
         statusCode: 200,
         headers: {

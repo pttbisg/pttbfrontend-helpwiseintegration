@@ -1,5 +1,7 @@
-{
+{ 
+  "name": "helpwise-integration",
   "dependencies": {
+    "@supabase/supabase-js": "^1.29.1",
     "axios": "^0.21.1",
     "backendless": "^6.2.22",
     "dotenv": "^10.0.0"
