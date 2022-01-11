@@ -1,5 +1,6 @@
 'use strict';
 const HelpWise = require("./HelpWise");
+const Supabase = require("./Supabase");
 const {
     CONVERSATION_CREATED,
     CONVERSATION_ASSIGNED,
@@ -9,8 +10,6 @@ const {
     WHATSAPP_INBOUND,
     WHATSAPP_OUTBOUND
 } = require("./constants");
-
-const Backendless = require('./Backendless');
 
 module.exports.sendMessageToClients = async (event) => {
     const parsedBody = JSON.parse(event.body);
@@ -48,8 +47,9 @@ module.exports.sendMessageToClients = async (event) => {
 };
 
 module.exports.clientConversations = async (event) => {
-    const backendless = new Backendless();
-    const conversations = await backendless.findConversationByTag()
+    const supabase = new Supabase();
+    const conversations = await supabase.findConversationByTag()
+
     return {
         statusCode: 200,
         headers: {

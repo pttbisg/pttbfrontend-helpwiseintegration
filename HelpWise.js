@@ -1,5 +1,5 @@
-const Backendless = require('./Backendless');
-const backendless = new Backendless();
+const Supabase = require('./Supabase');
+const supabase = new Supabase();
 const axios = require('axios');
 
 /**
@@ -36,7 +36,7 @@ class HelpWise {
      */
     async onConversationCreated(conversationObject) {
         console.log('Conversation Created', conversationObject);
-        await backendless.insertEmailConversationIntoBE(conversationObject);
+        await supabase.insertEmailConversationIntoBE(conversationObject);
     }
 
     async onConversationAssigned(conversationObject) {
@@ -62,7 +62,7 @@ class HelpWise {
     async onConversationTagApplied(conversationObject) {
         console.log('Conversation Tag Applied', conversationObject);
         const {tag, mailbox_id, thread_id, date} = conversationObject;
-        await backendless.updateConversationTag(thread_id, tag.name.toLowerCase(), {
+        await supabase.updateConversationTag(thread_id, tag.name.toLowerCase(), {
             updatedAt: date,
             mailboxId: mailbox_id
         });
@@ -74,7 +74,7 @@ class HelpWise {
 
     async onReplyFromCustomer(conversationObject) {
         console.log('Customer Replied', conversationObject);
-        await backendless.insertEmailConversationIntoBE(conversationObject);
+        await supabase.insertEmailConversationIntoBE(conversationObject);
     }
 
     /**
@@ -84,7 +84,7 @@ class HelpWise {
      */
     async onWhatsAppInboundMessage(whatsappConversationObject) {
         console.log('Whatsapp Inbound', whatsappConversationObject);
-        await backendless.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
+        await supabase.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
     }
 
     /**
@@ -94,7 +94,7 @@ class HelpWise {
      */
     async onWhatsAppOutboundMessage(whatsappConversationObject) {
         console.log('Whatsapp Outbound', whatsappConversationObject);
-        await backendless.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
+        await supabase.insertWhatsappConversationDataIntoBE(whatsappConversationObject);
     }
 
     /**
