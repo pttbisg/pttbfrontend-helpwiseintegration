@@ -1,4 +1,4 @@
-{ 
+{
   "name": "helpwise-integration",
   "dependencies": {
     "@supabase/supabase-js": "^1.29.1",
@@ -7,6 +7,6 @@
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
-    "serverless-offline": "^8.0.0"
+    "serverless-offline": "^8.3.1"
   }
 }

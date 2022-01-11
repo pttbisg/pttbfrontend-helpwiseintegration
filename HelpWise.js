@@ -1,6 +1,4 @@
-const Backendless = require('./Backendless');
-const Supabase = require('./SupaBase');
-const backendless = new Backendless();
+const Supabase = require('./Supabase');
 const supabase = new Supabase();
 const axios = require('axios');
 

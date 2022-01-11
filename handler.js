@@ -1,5 +1,6 @@
 'use strict';
 const HelpWise = require("./HelpWise");
+const Supabase = require("./Supabase");
 const {
     CONVERSATION_CREATED,
     CONVERSATION_ASSIGNED,
@@ -9,9 +10,6 @@ const {
     WHATSAPP_INBOUND,
     WHATSAPP_OUTBOUND
 } = require("./constants");
-
-const Backendless = require('./Backendless');
-const Supabase = require("./SupaBase");
 
 module.exports.sendMessageToClients = async (event) => {
     const parsedBody = JSON.parse(event.body);

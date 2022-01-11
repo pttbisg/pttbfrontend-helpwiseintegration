@@ -4,10 +4,8 @@ const {
 	SUPABASE_SERVICE_API_KEY
 } = process.env;
 
-console.log(SUPABASE_DATABASE_URL);
 // Connect to our database 
 const { createClient } = require('@supabase/supabase-js');
-let supabase;
 
 /**
  * @typedef {string} ConversationObject
@@ -38,12 +36,12 @@ let supabase;
 
 class Supabase {
   constructor() {
-    supabase = createClient(SUPABASE_DATABASE_URL, SUPABASE_SERVICE_API_KEY);
+    this.supabase = createClient(SUPABASE_DATABASE_URL, SUPABASE_SERVICE_API_KEY);
   }
 
   async _insertDataIntoBackendless(conversationObject) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await this.supabase
         .from('helpwise_conversations')
         .upsert(conversationObject, { ignoreDuplicates: true, returning: 'minimal' })
       
@@ -59,7 +57,7 @@ class Supabase {
 
   async findConversationByTag() {
     const groupedByTag = {};
-    const { data: conversations, error } = await supabase
+    const { data: conversations, error } = await this.supabase
         .from('helpwise_conversations')
         .select('*')
         .not('tag', 'is', 'null')
@@ -69,13 +67,13 @@ class Supabase {
       }
     
     for (const message of conversations) {
-        const {tag, id} = message
+        const {tag, conversation_id} = message
         if (!groupedByTag.hasOwnProperty(tag)) {
             groupedByTag[tag] = {};
         }
 
-        if (!groupedByTag[tag].hasOwnProperty(id)) {
-            groupedByTag[tag][id] = [];
+        if (!groupedByTag[tag].hasOwnProperty(conversation_id)) {
+            groupedByTag[tag][conversation_id] = [];
         }
 
         if(message.message_type === 'EMAIL') {
@@ -86,8 +84,10 @@ class Supabase {
             }
         }
 
-        groupedByTag[tag][id].push(message);
+        groupedByTag[tag][conversation_id].push(message);
     }
+
+    console.log(groupedByTag)
     return groupedByTag;
   }
 
@@ -99,7 +99,7 @@ class Supabase {
    */
   async updateConversationTag(id, tag, meta= {}) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await this.supabase
         .from('helpwise_conversations')
         .update({ tag: tag, updated_at: meta.date })
         .match({ id: id })

@@ -21,7 +21,7 @@ functions:
     events:
       - http:
           path: /conversations
-          method: POST
+          method: GET
           cors: true
   helpWiseHandler:
     handler: handler.helpWiseHandler
