@@ -60,6 +60,7 @@ class Supabase {
     const { data: conversations, error } = await this.supabase
         .from('helpwise_conversations')
         .select('*')
+        .is('ready_to_release', true)
         .not('tag', 'is', 'null')
       
       if (error) {
