@@ -47,8 +47,9 @@ module.exports.sendMessageToClients = async (event) => {
 };
 
 module.exports.clientConversations = async (event) => {
+    const { user_id } = event.queryStringParameters;
     const supabase = new Supabase();
-    const conversations = await supabase.findConversationByTag()
+    const conversations = await supabase.findConversationByUser(user_id);
 
     return {
         statusCode: 200,

@@ -1,13 +1,23 @@
 service: helpwise-integration
 
 frameworkVersion: '2'
+useDotenv: true
 
 provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
   region: ap-southeast-1
-
+  environment:
+    SUPABASE_DATABASE_URL: ${env:SUPABASE_DATABASE_URL}
+    SUPABASE_SERVICE_API_KEY: ${env:SUPABASE_SERVICE_API_KEY}
+    HELPWISE_KEY: ${env:HELPWISE_KEY}
+    HELPWISE_SECRET: ${env:HELPWISE_SECRET}
+    BACKENDLESS_APP_ID: ${env:BACKENDLESS_APP_ID}
+    BACKENDLESS_SECRET_KEY: ${env:BACKENDLESS_SECRET_KEY}
+    HELPWISE_CONVERSATION_TABLE: ${env:HELPWISE_CONVERSATION_TABLE}
+    HELPWISE_EMAIL_ACCOUNT: ${env:HELPWISE_EMAIL_ACCOUNT}
+    HELP_WHATSAPP_MAILBOX_ID: ${env:HELP_WHATSAPP_MAILBOX_ID}
 functions:
   sendMessageToClients:
     handler: handler.sendMessageToClients
@@ -22,7 +32,6 @@ functions:
       - http:
           path: /conversations
           method: GET
-          cors: true
   helpWiseHandler:
     handler: handler.helpWiseHandler
     events:

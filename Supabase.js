@@ -47,12 +47,28 @@ class Supabase {
       
       if (error) {
         console.log(error);
+        return;
       }
 
       console.log(data);
     } catch (e) {
         console.log(e);
     }
+  }
+
+  async findConversationByUser(user_id) {
+    let { data, error } = await this.supabase
+      .rpc('get_conversations_by_user_id', {
+        user_id
+      })
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    console.log(data);
+    return data;
   }
 
   async findConversationByTag() {
